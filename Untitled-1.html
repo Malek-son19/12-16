@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+   
+<header class="bg-primary text-white text-center py-3">
+    <h1>DRAGON BALL</h1>
+</header>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">dragon ball</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapes" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapes navbar-collapes" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#home">home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#gallery">gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about"></a>about</li>
+         
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section id="home" class="text-center bg-light py-5">
+    <h2>Welcome to the dragon ball world</h2>
+    <p class="lead">Discover your favorite db character</p>
+    <button class="btn btn-primary btn-lg">get started</button>
+</section>
+
+<section id="gallery" class="my-5">
+    <h3 class="text-center">DRAGON BALL Gallery</h3>
+    <div id="charactersRow" class="row g-4"> <!-- This will be populated by js to show the rest of the db cards -->
+    </div>
+</section>
+
+<script>
+    $(document).ready(function() { function fetchCharacters(url) {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    response.items.forEach(character => {
+
+                        // images do not show 
+                        console.log("Image URL:", character.imageUrl); 
+                        $('#charactersRow').append(buildCharacterCard(character));
+                    });
+                    if (response.links.next) {
+                        fetchCharacters(response.links.next);
+                    }
+                },
+                error: function(error) {
+                    console.log('Error fetching data:', error);
+                }
+            });
+        }
+    
+        function buildCharacterCard(character) {
+            
+            const name = character.name || 'Unknown Name';
+            const race = character.race || 'Unknown Race';
+            const gender = character.gender || 'Unknown Gender';
+            
+            return `
+            <div class="col-md-4">
+                <div class="card">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">Race: ${race}</p>
+                        <p class="card-text">Gender: ${gender}</p>
+                    </div>
+                </div>
+            </div>`;
+        }
+    
+        fetchCharacters('https://dragonball-api.com/api/characters?limit=10');
+    });
+    </script>
+    
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html> 
